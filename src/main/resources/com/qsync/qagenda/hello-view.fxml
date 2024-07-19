@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+
+<?import java.lang.String?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.qsync.qagenda.Controller">
+
+    <!-- Top Area for Date Picker and Event List -->
+    <top>
+        <VBox spacing="10" prefHeight="400">
+            <padding>
+                <Insets top="10" bottom="10" right="10" left="10" />
+            </padding>
+            <Label text="Agenda Application" style="-fx-font-size: 20; -fx-font-weight: bold;" />
+            <HBox spacing="10">
+                <ToggleButton text="Show Events" toggleGroup="$displayToggleGroup" selected="true" onAction="#showEvents" />
+                <ToggleButton text="Show Notes" toggleGroup="$displayToggleGroup" onAction="#showNotes" />
+            </HBox>
+            <VBox fx:id="topContent" spacing="10">
+                <!-- Initially, events will be shown here -->
+                <HBox spacing="10">
+                    <Label text="Select Date:" />
+                    <DatePicker fx:id="datePicker" />
+                    <Label text="Max Date Range:" />
+                    <ComboBox fx:id="dateRangeSelector" onAction="#showEvents">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Day" />
+                                <String fx:value="Week" />
+                                <String fx:value="Month" />
+                                <String fx:value="Year" />
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                </HBox>
+                <ListView fx:id="eventList" prefHeight="300" />
+            </VBox>
+        </VBox>
+    </top>
+
+    <!-- Center Area for Main Content (Switchable views) -->
+    <center>
+
+        <TabPane fx:id="mainTabPane">
+            <padding>
+                <Insets top="10" bottom="10" right="10" left="10" />
+            </padding>
+            <Tab text="Agenda">
+                <AnchorPane>
+                    <VBox spacing="10"  >
+                        <Label text="Agenda View" style="-fx-font-size: 18; -fx-font-weight: bold;" />
+                        <HBox spacing="10">
+                            <Label text="Event Date:" />
+                            <DatePicker fx:id="agendaDatePicker" />
+                            <Label text="Event Time:" />
+                            <TextField fx:id="timePicker" promptText="HH:MM" />
+                        </HBox>
+                        <TextArea fx:id="eventDescription" promptText="Event Description" />
+                        <Button text="Add Event" onAction="#handleAddEvent" />
+                    </VBox>
+                </AnchorPane>
+            </Tab>
+            <Tab text="Notes">
+                <AnchorPane>
+                    <VBox spacing="10"  >
+                        <Label text="Notes" style="-fx-font-size: 18; -fx-font-weight: bold;" />
+                        <TextArea fx:id="notesArea" promptText="Write your notes here..." />
+                        <Button text="Save Notes" onAction="#handleSaveNotes" />
+                    </VBox>
+                </AnchorPane>
+            </Tab>
+            <Tab text="Settings">
+                <AnchorPane>
+                    <VBox spacing="10"  >
+                        <Label text="Settings" style="-fx-font-size: 18; -fx-font-weight: bold;" />
+                        <!-- Add Settings UI components here -->
+                    </VBox>
+                </AnchorPane>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>

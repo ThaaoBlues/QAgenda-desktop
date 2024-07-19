@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: com.qsync.qagenda.Main_1
+Class-Path: /home/thaao/IdeaProjects/QAgenda/src/main/java/com/qsync/qag
+ enda/Main_1.java
+

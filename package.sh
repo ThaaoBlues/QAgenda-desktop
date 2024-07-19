@@ -1,0 +1,2 @@
+jpackage --input out/artifacts/QAgenda_jar --name QAgenda --main-jar /home/thaao/IdeaProjects/QAgenda/out/artifacts/QAgenda_jar/QAgenda.jar --main-class com.qsync.qagenda.Main_1 --icon agenda.png --type exe --win-menu --win-shortcut
+jpackage --input out/artifacts/QAgenda_jar --name QAgenda --main-jar /home/thaao/IdeaProjects/QAgenda/out/artifacts/QAgenda_jar/QAgenda.jar --main-class com.qsync.qagenda.Main_1 --icon agenda.png --type deb --linux-shortcut
