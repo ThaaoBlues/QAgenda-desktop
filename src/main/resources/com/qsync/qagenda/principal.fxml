@@ -29,8 +29,8 @@
             </padding>
             <Label text="Agenda Application" style="-fx-font-size: 20; -fx-font-weight: bold;" />
             <HBox spacing="10">
-                <ToggleButton text="Show Events" toggleGroup="$displayToggleGroup" selected="true" onAction="#showEvents" />
-                <ToggleButton text="Show Notes" toggleGroup="$displayToggleGroup" onAction="#showNotes" />
+                <ToggleButton  fx:id="show_events_button" text="Show Events" toggleGroup="$displayToggleGroup" selected="true" onAction="#showEvents" />
+                <ToggleButton fx:id="show_notes_button" text="Show Notes" toggleGroup="$displayToggleGroup" onAction="#showNotes" />
             </HBox>
             <VBox fx:id="topContent" spacing="10">
                 <!-- Initially, events will be shown here -->

@@ -22,6 +22,8 @@ import java.util.*;
 
 public class Controller {
 
+    public ToggleButton show_events_button;
+    public ToggleButton show_notes_button;
     @FXML
     private DatePicker datePicker;
 
@@ -132,6 +134,8 @@ public class Controller {
         eventControls.getChildren().addAll(new Label("Select Date:"), datePicker, new Label("Max Date Range:"), dateRangeSelector);
         topContent.getChildren().addAll(eventControls, eventList);
         displayEvents();
+        show_notes_button.setSelected(false);
+        show_events_button.setSelected(true);
     }
 
     @FXML
@@ -164,9 +168,25 @@ public class Controller {
                     VBox noteCard = new VBox(5);
                     noteCard.setPadding(new Insets(10));
                     noteCard.setStyle("-fx-border-color: black; -fx-border-width: 1;");
-                    noteCard.getChildren().addAll(new Label(readableDate), new TextArea(new String(fis.readAllBytes())));
-                    notesPane.getChildren().add(noteCard);
+                    TextArea noteContent = new TextArea(new String(fis.readAllBytes()));
+
+
                     fis.close();
+
+                    Button saveButton = new Button("Save");
+
+                    saveButton.setOnAction(e -> {
+                        try {
+                            FileOutputStream fos = new FileOutputStream(noteFile);
+                            fos.write(noteContent.getText().getBytes(StandardCharsets.UTF_8));
+                            fos.close();
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    });
+                    noteCard.getChildren().addAll(new Label(readableDate), noteContent, saveButton);
+                    notesPane.getChildren().add(noteCard);
+
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 } catch (IOException e) {
@@ -183,6 +203,9 @@ public class Controller {
         scrollPane.setPrefViewportHeight(300);
 
         topContent.getChildren().add(scrollPane);
+
+        show_notes_button.setSelected(true);
+        show_events_button.setSelected(false);
     }
 
 
