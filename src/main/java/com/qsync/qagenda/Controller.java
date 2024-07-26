@@ -184,7 +184,20 @@ public class Controller {
                             throw new RuntimeException(ex);
                         }
                     });
-                    noteCard.getChildren().addAll(new Label(readableDate), noteContent, saveButton);
+
+                    // Create the Remove button
+                    Button removeButton = new Button("Remove");
+
+                    removeButton.setOnAction(e -> {
+                        if (noteFile.delete()) {
+                            notesPane.getChildren().remove(noteCard);
+                        } else {
+                            // Handle the case where the file couldn't be deleted
+                            System.err.println("Failed to delete the file: " + noteFile.getPath());
+                        }
+                    });
+
+                    noteCard.getChildren().addAll(new Label(readableDate), noteContent, saveButton, removeButton);
                     notesPane.getChildren().add(noteCard);
 
                 } catch (FileNotFoundException e) {
