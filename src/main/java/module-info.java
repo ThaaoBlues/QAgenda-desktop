@@ -5,6 +5,6 @@ module com.qsync.qagenda {
     requires jdk.compiler;
 
 
-    opens com.qsync.qagenda to javafx.fxml;
-    exports com.qsync.qagenda;
+    opens com.ecosys.qagenda to javafx.fxml;
+    exports com.ecosys.qagenda;
 }

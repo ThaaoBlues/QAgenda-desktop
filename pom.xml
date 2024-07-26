@@ -60,7 +60,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.qsync.qagenda/com.qsync.qagenda.QAgenda</mainClass>
+                            <mainClass>com.ecosys.qagenda/com.ecosys.qagenda.QAgenda</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

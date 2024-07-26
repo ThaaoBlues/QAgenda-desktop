@@ -1,4 +1,4 @@
-package com.qsync.qagenda;
+package com.ecosys.qagenda;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

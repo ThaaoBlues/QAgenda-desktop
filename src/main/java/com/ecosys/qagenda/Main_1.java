@@ -1,4 +1,4 @@
-package com.qsync.qagenda;
+package com.ecosys.qagenda;
 
 
 // this class is only here because without it the jar building breaks

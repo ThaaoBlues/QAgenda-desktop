@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import java.lang.String?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.qsync.qagenda.Controller">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.ecosys.qagenda.Controller">
 
     <!-- Top Area for Date Picker and Event List -->
     <top>
