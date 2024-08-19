@@ -59,7 +59,9 @@ public class Controller {
     private Date filterDate;
 
     private final String AGENDA_PATH = "calendrier/agenda.ics";
-    private final String NOTES_PATH = "notes";
+    private final String NOTES_DIR_PATH = "notes";
+    private final String NOTES_ANNUAIRE_PATH = "notes/annuaire.txt";
+
     @FXML
     private void initialize() {
         displayToggleGroup.getToggles().forEach(toggle -> ((ToggleButton) toggle).setToggleGroup(displayToggleGroup));
@@ -103,14 +105,18 @@ public class Controller {
         // Logic to save notes
 
         Calendar cl = Calendar.getInstance();
-        File noteFile = new File(NOTES_PATH,Long.toString(cl.getTime().getTime())+".txt");
 
+        String noteTimeStamp = Long.toString(cl.getTime().getTime());
+
+        Note note = new Note();
+
+        note.setTimestamp_creation(noteTimeStamp);
+
+        note.setTitle("Note");
+
+        note.setTimestamp_link_event("AUCUN");
         try {
-            noteFile.createNewFile();
-            FileOutputStream fos = new FileOutputStream(noteFile);
-            fos.write(notesArea.getText().getBytes(StandardCharsets.UTF_8));
-            fos.close();
-
+            note.saveNote(notesArea.getText().getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -146,40 +152,65 @@ public class Controller {
         notesPane.setHgap(10);
         notesPane.setVgap(10);
 
-        File notesDir = new File(NOTES_PATH);
+        File annuaireNotes = new File(NOTES_ANNUAIRE_PATH);
+
+        if(!annuaireNotes.exists()){
+            try{
+                annuaireNotes.getParentFile().mkdirs();
+                annuaireNotes.createNewFile();
+            }catch (IOException e){
+                throw new RuntimeException(e);
+            }
+        }
+
+        // une entrée d'annuaire des notes est composée comme suit :
+        // timestamp_creation_en_ms;titre_note;date_evenement_lié
+
+
+
+        ArrayList<Note> annuaire = new ArrayList<>();
+        try {
+            FileReader fr = new FileReader(annuaireNotes);
+            BufferedReader bfr = new BufferedReader(fr);
+            while(bfr.ready()){
+                String entry = bfr.readLine();
+                Note note = new Note();
+                note.setFromAnnuaireEntry(entry);
+                annuaire.add(note);
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
 
         // Populate notesPane with note cards
-        for (String noteFileName : notesDir.list()) {
+        for (Note note : annuaire) {
 
-            Calendar cl = Calendar.getInstance();
-            String[] parts = noteFileName.split("\\.");
-            if(parts.length == 2) {
-                Instant instant = Instant.ofEpochMilli(Long.parseLong(parts[0]));
-                LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                String readableDate = dateTime.format(formatter);
+            Instant instant = Instant.ofEpochMilli(
+                    Long.parseLong(
+                            note.getTimestamp_creation()
+                    )
+            );
+            LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String readableDate = dateTime.format(formatter);
 
 
-                File noteFile = new File(notesDir, noteFileName);
 
                 try {
-                    FileInputStream fis = new FileInputStream(noteFile);
                     VBox noteCard = new VBox(5);
                     noteCard.setPadding(new Insets(10));
                     noteCard.setStyle("-fx-border-color: black; -fx-border-width: 1;");
-                    TextArea noteContent = new TextArea(new String(fis.readAllBytes()));
+                    TextArea noteContent = new TextArea(note.readNote());
 
-
-                    fis.close();
 
                     Button saveButton = new Button("Save");
 
                     saveButton.setOnAction(e -> {
                         try {
-                            FileOutputStream fos = new FileOutputStream(noteFile);
-                            fos.write(noteContent.getText().getBytes(StandardCharsets.UTF_8));
-                            fos.close();
+                            note.saveNote(noteContent.getText().getBytes(StandardCharsets.UTF_8));
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
@@ -189,11 +220,11 @@ public class Controller {
                     Button removeButton = new Button("Remove");
 
                     removeButton.setOnAction(e -> {
-                        if (noteFile.delete()) {
+                        if (note.deleteNote()) {
                             notesPane.getChildren().remove(noteCard);
                         } else {
                             // Handle the case where the file couldn't be deleted
-                            System.err.println("Failed to delete the file: " + noteFile.getPath());
+                            System.err.println("Failed to delete the note file : "+note.getTimestamp_creation()+".txt");
                         }
                     });
 
@@ -205,7 +236,6 @@ public class Controller {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            }
 
         }
 
@@ -361,7 +391,7 @@ public class Controller {
             }
         }
 
-        File notesDir = new File(NOTES_PATH);
+        File notesDir = new File(NOTES_DIR_PATH);
 
         if(!notesDir.exists()){
             notesDir.mkdirs();
